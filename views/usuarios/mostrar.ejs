@@ -1,0 +1,44 @@
+<%- include("../template/encabezado") %>
+<%- include("../template/menu") %>
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-header">
+            <h1>Usuarios</h1>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Password</th>
+                        <th>Foto</th>
+                        <th>Editar/Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                    users.forEach((usuario, i) => {
+                    %>
+                    <tr>
+                        <td><%= i + 1 %></td>
+                        <td><%= usuario.nombre %></td>
+                        <td><%= usuario.usuario %></td>
+                        <td>*********</td>
+                        <td><img src="/images/<%= usuario.foto %>" width="100px" alt="Imagen del usuario"></td>
+                        <td>
+                            <a href="/editarUsuario/<%= usuario.id %>" class="btn btn-info">Editar</a>
+                            <a href="/borrarUsuario/<%= usuario.id %>" class="btn btn-danger">Borrar</a>
+                        </td>
+                    </tr>
+                    <%
+                    });
+                    %>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+</div>
+<%- include("../template/pie") %>
