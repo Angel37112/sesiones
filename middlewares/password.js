@@ -14,8 +14,6 @@ function validarPassword(password, salt, hash){
     return hashNuevo === hash;
 }
 
-var{salt, hash} = generarPassword("hola");
-
 module.exports = {
     generarPassword,
     validarPassword

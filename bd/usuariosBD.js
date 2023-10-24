@@ -20,25 +20,45 @@ async function mostrarUsuarios(){
     return users;
 }
 
+async function login(datos){
+  var error = 1;
+  var users = await mostrarUsuarios();
+
+  var usuarioEncontrado = false;
+  var passwordEncontrada = false;
+
+  var usuario = users.find(dato => dato.usuario === datos.usuario)
+  var password = users.find(dato => dato.password === datos.password)
+  if(usuario){
+    usuarioEncontrado = true;
+    if(password){
+      passwordEncontrada = true;
+    }
+  }
+
+  if(usuarioEncontrado && passwordEncontrada){
+    return error = 0;
+  }
+} 
+
 async function nuevoUsuario(newUser){
-  var{salt, hash} = generarPassword(newUser.password);
-  newUser.salt = salt;
-  newUser.password = hash;
-  var error = 1; 
+  var error=1;
   try{
-    var usuario1 = new Usuario(null,newUser);
-    if(usuario1.bandera == 0){
-      conexion.doc().set(usuario1.obtenerUsuario);
-      error = 0;
-    }
-    else{
-      console.log("Datos incorrectos del formulario");
-    }
+      var usuario1=new Usuario(null,newUser);
+      console.log("Se encontraron los datos: ", usuario1);
+      if(usuario1.bandera==0){
+          conexion.doc().set(usuario1.obtenerUsuario);
+          error=0;
+      }
+      else{
+          console.log("datos incorrectos");
+      }
+     
   }
   catch(err){
-    console.log("Error al crear un nuevo usuario "+err);
+      console.log("error al crear usuario"+err);
   }
-  return error; 
+  return error;
 }
 
 async function buscarPorId(id){
@@ -60,7 +80,7 @@ async function modificarUsuario(datos){
   var error = 1;
   var user = await buscarPorId(datos.id);
   if(user != undefined){
-    if(datos.password = ""){
+    if(datos.password === ""){
       datos.password = datos.passwordAnterior;
     }
     else{
@@ -107,5 +127,6 @@ module.exports = {
     nuevoUsuario,
     buscarPorId,
     modificarUsuario,
-    borrarUsuario
+    borrarUsuario,
+    login
 }

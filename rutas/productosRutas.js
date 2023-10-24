@@ -14,9 +14,9 @@ ruta.get("/productos/nuevoproducto",(req,res)=>{
 }); 
 
 ruta.post("/nuevoproducto", subirArchivo(), async (req,res)=>{
+    req.body.foto = req.file.filename;
     var error = await nuevoProducto(req.body);
-    req.body.foto = req.file.originalname;
-    res.redirect("/mostrarProductos"); 
+    res.redirect("productos/mostrarProductos"); 
 }); 
 
 ruta.get("/editarProducto/:id", async(req, res) => {
@@ -26,13 +26,9 @@ ruta.get("/editarProducto/:id", async(req, res) => {
 
 ruta.post("/editarProducto",subirArchivo(), async (req,res)=>{
     try {
-            var rutaImagen = path.join(__dirname, "..", "web", "images", req.body.foto);
-            if (fs.existsSync(rutaImagen)) {
-                fs.unlinkSync(rutaImagen);
-                req.body.foto = req.file.originalname;
-                await modificarProducto(req.body);
-            }
-        
+        fs.unlinkSync("./web/images/"+req.body.fotoAnterior);
+        req.body.foto = req.file.filename;
+        await modificarProducto(req.body);
         res.redirect("/productos/mostrarProductos");
     } catch (error) {
         console.error("Error al editar usuario:", error);
